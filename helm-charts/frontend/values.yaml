@@ -1,0 +1,32 @@
+# Essential configuration only
+replicaCount: 2
+
+# Container image
+image:
+  repository: acrdevopscicd001.azurecr.io/frontend
+  tag: "latest"
+  pullPolicy: Always
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+# Resource limits (important for production)
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Environment variables (if needed)
+env: []
+# Example:
+# env:
+#   - name: REACT_APP_API_URL
+#     value: "https://api.yourapp.com"
+#   - name: NODE_ENV
+#     value: "production"

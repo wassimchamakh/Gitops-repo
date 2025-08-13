@@ -1,0 +1,34 @@
+# Essential configuration only
+replicaCount: 2
+
+# Container image
+image:
+  repository: acrdevopscicd001.azurecr.io/backend
+  tag: "latest"
+  pullPolicy: Always
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080  # Adjust based on your backend port
+
+# Resource limits
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Environment variables for backend
+env: []
+# Example:
+# env:
+#   - name: DATABASE_URL
+#     value: "mongodb://mongo-service:27017/myapp"
+#   - name: JWT_SECRET
+#     value: "your-jwt-secret"
+#   - name: NODE_ENV
+#     value: "production"
