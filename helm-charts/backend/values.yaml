@@ -11,7 +11,7 @@ image:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 5501  # Adjust based on your backend port
+  targetPort: 3301 # Adjust based on your backend port
 
 # Resource limits
 resources:
