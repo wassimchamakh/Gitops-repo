@@ -21,6 +21,8 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node"]           # Override npm start
+          args: ["index.js"]    # Adjust based on your backend entry point
           ports:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
@@ -32,15 +34,16 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           # Health checks for backend
-          livenessProbe:
-            httpGet:
-              path: /health  # Adjust path based on your backend
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /health  # Adjust path based on your backend
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 5
+        # Remove health checks for now
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5

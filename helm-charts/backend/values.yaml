@@ -11,16 +11,16 @@ image:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8080  # Adjust based on your backend port
+  targetPort: 5501  # Adjust based on your backend port
 
 # Resource limits
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 100m
+    memory: 128Mi
   requests:
-    cpu: 250m
-    memory: 256Mi
+    cpu: 50m
+    memory: 64Mi
 
 # Environment variables for backend
 env: []
