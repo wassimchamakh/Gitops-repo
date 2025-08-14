@@ -11,16 +11,18 @@ image:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 3000
+  targetPort: 80
 
 # Resource limits (important for production)
-resources:
+  resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 200m      # Reduced from 500m
+    memory: 256Mi  # Reduced from 512Mi
   requests:
-    cpu: 250m
-    memory: 256Mi
+    cpu: 100m      # Reduced from 250m
+    memory: 128Mi  # Reduced from 256Mi
+
+    
 
 # Environment variables (if needed)
 env: []
