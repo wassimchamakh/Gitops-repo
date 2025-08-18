@@ -9,7 +9,7 @@ image:
 
 # Service configuration
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
   targetPort: 3001 # Adjust based on your backend port
 
