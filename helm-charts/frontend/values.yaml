@@ -1,34 +1,22 @@
-# Essential configuration only
-replicaCount: 2
+﻿replicaCount: 2
 
-# Container image
 image:
-  repository: acrdevopscicd001.azurecr.io/frontend
-  tag: "68"
+  repository: acrhraprod.azurecr.io/web
+  tag: "latest"
   pullPolicy: Always
 
-# Service configuration
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
   targetPort: 80
 
-# Resource limits (important for production)
-  resources:
+resources:
   limits:
-    cpu: 200m      # Reduced from 500m
-    memory: 256Mi  # Reduced from 512Mi
+    cpu: 200m
+    memory: 256Mi
   requests:
-    cpu: 100m      # Reduced from 250m
-    memory: 128Mi  # Reduced from 256Mi
+    cpu: 50m
+    memory: 64Mi
 
-    
-
-# Environment variables (if needed)
+# VITE_ variables are baked in at build time; no runtime env needed.
 env: []
-# Example:
-# env:
-#   - name: REACT_APP_API_URL
-#     value: "https://api.yourapp.com"
-#   - name: NODE_ENV
-#     value: "production"

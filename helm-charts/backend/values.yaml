@@ -1,34 +1,41 @@
-# Essential configuration only
-replicaCount: 2
+﻿replicaCount: 2
 
-# Container image
 image:
-  repository: acrdevopscicd001.azurecr.io/backend
-  tag: "68"
+  repository: acrhraprod.azurecr.io/backend
+  tag: "latest"
   pullPolicy: Always
 
-# Service configuration
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
-  targetPort: 3001 # Adjust based on your backend port
+  targetPort: 5000
 
-# Resource limits
 resources:
   limits:
+    cpu: 300m
+    memory: 384Mi
+  requests:
     cpu: 100m
     memory: 128Mi
-  requests:
-    cpu: 50m
-    memory: 64Mi
 
-# Environment variables for backend
-env: []
-# Example:
-# env:
-#   - name: DATABASE_URL
-#     value: "mongodb://mongo-service:27017/myapp"
-#   - name: JWT_SECRET
-#     value: "your-jwt-secret"
-#   - name: NODE_ENV
-#     value: "production"
+env:
+  - name: NODE_ENV
+    value: "production"
+  - name: KEYCLOAK_URL
+    value: "http://keycloak.default.svc.cluster.local:8080"
+  - name: KEYCLOAK_REALM
+    value: "hr-analytics"
+  - name: KEYCLOAK_CLIENT_ID
+    value: "hr-analytics-backend"
+  - name: REDIS_HOST
+    value: "redis.default.svc.cluster.local"
+  - name: REDIS_PORT
+    value: "6379"
+  - name: OLLAMA_BASE_URL
+    value: "http://ollama.default.svc.cluster.local:11434"
+  - name: OLLAMA_MODEL
+    value: "llama3.2:1b"
+  - name: ML_SERVICE_URL
+    value: "http://ml-ml.default.svc.cluster.local:8000"
+  - name: QLIK_TLS_REJECT_UNAUTHORIZED
+    value: "true"
