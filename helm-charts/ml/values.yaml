@@ -1,15 +1,12 @@
-﻿replicaCount: 1
-
+replicaCount: 1
 image:
   repository: acrhraprod.azurecr.io/ml
-  tag: "latest"
+  tag: "b7"
   pullPolicy: Always
-
 service:
   type: ClusterIP
   port: 80
   targetPort: 8000
-
 resources:
   limits:
     cpu: 500m
@@ -17,5 +14,4 @@ resources:
   requests:
     cpu: 200m
     memory: 256Mi
-
 env: []

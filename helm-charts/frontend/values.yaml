@@ -1,15 +1,12 @@
-﻿replicaCount: 2
-
+replicaCount: 2
 image:
   repository: acrhraprod.azurecr.io/web
-  tag: "latest"
+  tag: "b7"
   pullPolicy: Always
-
 service:
   type: ClusterIP
   port: 80
   targetPort: 80
-
 resources:
   limits:
     cpu: 200m
@@ -17,6 +14,5 @@ resources:
   requests:
     cpu: 50m
     memory: 64Mi
-
 # VITE_ variables are baked in at build time; no runtime env needed.
 env: []
