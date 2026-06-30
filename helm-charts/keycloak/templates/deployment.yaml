@@ -39,16 +39,18 @@ spec:
               value: "edge"
             - name: KC_HEALTH_ENABLED
               value: "true"
+            - name: KC_HTTP_RELATIVE_PATH
+              value: "/auth"
           readinessProbe:
             httpGet:
-              path: /health/ready
+              path: /auth/health/ready
               port: 8080
             initialDelaySeconds: 90
             periodSeconds: 15
             failureThreshold: 10
           livenessProbe:
             httpGet:
-              path: /health/live
+              path: /auth/health/live
               port: 8080
             initialDelaySeconds: 150
             periodSeconds: 20
