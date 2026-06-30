@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: default
+  labels:
+    app: keycloak
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["start-dev"]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: {{ .Values.adminUser | quote }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: {{ .Values.adminPassword | quote }}
+            - name: KC_DB
+              value: "dev-file"
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_PROXY
+              value: "edge"
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 15
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
