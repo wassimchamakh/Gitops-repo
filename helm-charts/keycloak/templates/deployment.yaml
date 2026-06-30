@@ -24,6 +24,9 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: management
+              containerPort: 9000
+              protocol: TCP
           env:
             - name: KEYCLOAK_ADMIN
               value: {{ .Values.adminUser | quote }}
@@ -37,18 +40,21 @@ spec:
               value: "true"
             - name: KC_PROXY
               value: "edge"
+            - name: KC_HEALTH_ENABLED
+              value: "true"
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 10
+              port: 9000
+            initialDelaySeconds: 90
+            periodSeconds: 15
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /health/live
-              port: 8080
-            initialDelaySeconds: 90
-            periodSeconds: 15
+              port: 9000
+            initialDelaySeconds: 150
+            periodSeconds: 20
+            failureThreshold: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
