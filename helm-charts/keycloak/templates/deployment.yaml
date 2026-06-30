@@ -24,9 +24,6 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - name: management
-              containerPort: 9000
-              protocol: TCP
           env:
             - name: KEYCLOAK_ADMIN
               value: {{ .Values.adminUser | quote }}
@@ -45,14 +42,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: 9000
+              port: 8080
             initialDelaySeconds: 90
             periodSeconds: 15
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /health/live
-              port: 9000
+              port: 8080
             initialDelaySeconds: 150
             periodSeconds: 20
             failureThreshold: 5
