@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: acrhraprod.azurecr.io/ml
-  tag: "b8"
+  tag: "b9"
   pullPolicy: Always
 service:
   type: ClusterIP
