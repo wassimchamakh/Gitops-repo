@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: acrhraprod.azurecr.io/ml
+  repository: acrhraprod7e7a9fc9.azurecr.io/ml
   tag: "b13"
   pullPolicy: Always
 service:

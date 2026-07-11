@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/wassimchamakh/Gitops-repo.git
+    repoURL: https://github.com/wassimchamakh/hr-analytics.git
     targetRevision: HEAD
-    path: helm-charts/frontend
+    path: _gitops_work/helm-charts/frontend
     helm:
       valueFiles:
         - values.yaml
