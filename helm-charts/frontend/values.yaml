@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
-  repository: acrhraprod.azurecr.io/web
-  tag: "b15"
+  repository: acrhraprod7e7a9fc9.azurecr.io/web
+  tag: "b11"
   pullPolicy: Always
 service:
   type: ClusterIP
