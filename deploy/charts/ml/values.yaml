@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: acrhra.azurecr.io/ml
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  host: ""
+  tls: false
+  clusterIssuer: letsencrypt-prod
+  path: /ml(/|$)(.*)
+  pathType: ImplementationSpecific
+  annotations: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+healthCheck:
+  path: /health
+  initialDelaySeconds: 15
+  periodSeconds: 30
+
+autoscaling:
+  enabled: false

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: ci-cd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins   # RBAC: allows Jenkins to spawn agent pods
+      securityContext:
+        fsGroup: 1000          # Jenkins runs as uid 1000 — needed to write to PVC
+        runAsUser: 1000
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts-jdk17
+          ports:
+            - containerPort: 8080   # Jenkins UI
+            - containerPort: 50000  # Jenkins agents (JNLP)
+          env:
+            - name: JAVA_OPTS
+              value: "-Xmx1536m"
+            - name: JENKINS_OPTS
+              value: "--prefix=/jenkins"
+            - name: JENKINS_SLAVE_AGENT_PORT
+              value: "50000"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1500m"
+              memory: "2Gi"
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+          readinessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /jenkins/login
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            failureThreshold: 5
+      volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-pvc

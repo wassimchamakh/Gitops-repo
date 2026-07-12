@@ -1,0 +1,16 @@
+# Production values for web — IMAGE TAG IS UPDATED BY JENKINS CI
+image:
+  repository: acrhraprod7e7a9fc9.azurecr.io/web
+  tag: "b12"
+
+ingress:
+  host: ""
+  tls: false
+  path: /
+  pathType: Prefix
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+# Disable HPA until metrics-server is confirmed installed
+autoscaling:
+  enabled: false

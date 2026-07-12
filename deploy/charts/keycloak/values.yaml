@@ -1,0 +1,55 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/keycloak/keycloak
+  tag: "24.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  host: auth.hr-analytics.example.com
+  tls: true
+  clusterIssuer: letsencrypt-prod
+  path: /
+  pathType: Prefix
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+command: ["start-dev"]
+
+env:
+  KEYCLOAK_ADMIN: admin
+  KC_DB: dev-mem
+  KC_HEALTH_ENABLED: "true"
+
+# admin password from Key Vault
+secretProvider:
+  enabled: true
+  keyvaultName: kv-hra-prod
+  tenantId: ""
+  secrets:
+    - name: keycloak-admin-password
+      key: keycloak-admin-password
+      envVar: KEYCLOAK_ADMIN_PASSWORD
+
+healthCheck:
+  path: /health/ready
+  initialDelaySeconds: 30
+  periodSeconds: 15
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: managed-csi

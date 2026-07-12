@@ -1,0 +1,17 @@
+# Argo CD server runtime parameters.
+# Sets the rootpath so the UI loads assets correctly when served under /argocd.
+# server.insecure=true lets Argo CD serve plain HTTP; nginx handles TLS termination.
+#
+# Apply once after Argo CD is installed (or re-apply after any argocd upgrade):
+#   kubectl apply -f deploy/argocd/bootstrap/argocd-cmd-params-cm.yaml
+#
+# A rollout restart is required for changes to take effect:
+#   kubectl rollout restart deployment argocd-server -n argocd
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cmd-params-cm
+  namespace: argocd
+data:
+  server.rootpath: "/argo"
+  server.insecure: "true"

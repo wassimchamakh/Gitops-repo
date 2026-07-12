@@ -1,0 +1,25 @@
+# Root Application — "App of Apps" pattern
+# This single Application manages all other Applications in the cluster.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/wassimchamakh/Gitops-repo.git
+    targetRevision: HEAD
+    path: deploy/argocd/apps/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube-postgres
+  namespace: ci-cd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube-postgres
+  template:
+    metadata:
+      labels:
+        app: sonarqube-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_DB
+              value: "sonarqube"
+            - name: POSTGRES_USER
+              value: "sonar"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sonarqube-postgres-secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata    # subPath avoids lost+found issue
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube-postgres
+  namespace: ci-cd
+spec:
+  type: ClusterIP
+  selector:
+    app: sonarqube-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

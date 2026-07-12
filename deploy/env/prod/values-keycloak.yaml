@@ -1,0 +1,29 @@
+# Production values for Keycloak
+ingress:
+  host: ""
+  tls: false
+  path: /auth
+  pathType: Prefix
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+env:
+  KC_HTTP_RELATIVE_PATH: /auth
+  KC_PROXY_HEADERS: xforwarded
+  KEYCLOAK_ADMIN_PASSWORD: admin   # temporary — replace with real secret later
+
+healthCheck:
+  path: /auth/health/ready
+  initialDelaySeconds: 90
+  periodSeconds: 20
+
+# Disable Azure Key Vault CSI until driver is properly configured
+secretProvider:
+  enabled: false
+  tenantId: "e04c5ae5-2eab-478d-a72f-1f314c6e8c5a"
+
+autoscaling:
+  enabled: false
+
+# Override full command: kc.sh start-dev (dev mode, no TLS, in-memory DB)
+command: ["/opt/keycloak/bin/kc.sh", "start-dev"]

@@ -1,0 +1,63 @@
+replicaCount: 2
+
+image:
+  repository: acrhra.azurecr.io/backend
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5000
+
+ingress:
+  enabled: true
+  host: api.hr-analytics.example.com
+  tls: true
+  clusterIssuer: letsencrypt-prod
+  path: /
+  pathType: Prefix
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+env:
+  NODE_ENV: production
+  PORT: "5000"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  KEYCLOAK_URL: http://keycloak:8080
+  KEYCLOAK_REALM: hr-analytics
+  KEYCLOAK_CLIENT_ID: hr-analytics-backend
+  OLLAMA_BASE_URL: http://ollama:11434
+  OLLAMA_MODEL: "llama3.2:1b"
+  ML_SERVICE_URL: http://ml:8000
+
+# Secrets from Azure Key Vault (mounted via CSI)
+secretProvider:
+  enabled: true
+  keyvaultName: kv-hra-prod
+  tenantId: ""      # filled per environment
+  secrets:
+    - name: redis-password
+      key: redis-password
+    - name: keycloak-client-secret
+      key: keycloak-backend-secret
+
+healthCheck:
+  path: /api/health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPU: 70

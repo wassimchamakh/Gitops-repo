@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-pvc
+  namespace: ci-cd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-csi   # Azure managed disk (default in AKS)
+  resources:
+    requests:
+      storage: 8Gi

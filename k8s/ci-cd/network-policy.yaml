@@ -1,0 +1,59 @@
+# NetworkPolicy: restrict outbound traffic from ci-cd namespace
+# This is the key protection against a compromised Jenkins/SonarQube pod
+# being used to generate DDoS traffic.
+#
+# Allowed outbound:
+#   - DNS (UDP+TCP port 53)       — needed by all pods to resolve hostnames
+#   - HTTPS (TCP 443)             — Jenkins: plugins, GitHub, Docker Hub
+#   - HTTP  (TCP 80)              — Jenkins: some package mirrors use plain http
+#   - PostgreSQL (TCP 5432)       — SonarQube → PostgreSQL (internal)
+#   - Jenkins agent (TCP 50000)   — Jenkins build agents JNLP
+#
+# Blocked outbound (DDoS vectors):
+#   - All UDP except DNS (blocks UDP amplification: SSDP 1900, NTP 123, etc.)
+#   - All uncommon TCP ports      (blocks port scanning, IRC C2, etc.)
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ci-cd-egress-restriction
+  namespace: ci-cd
+spec:
+  podSelector: {}          # applies to ALL pods in ci-cd namespace
+  policyTypes:
+    - Egress
+  egress:
+    # DNS — all pods need this to resolve hostnames
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+
+    # HTTPS — Jenkins plugins, GitHub, SonarQube marketplace
+    - ports:
+        - port: 443
+          protocol: TCP
+
+    # HTTP — some package mirrors
+    - ports:
+        - port: 80
+          protocol: TCP
+
+    # PostgreSQL — SonarQube to its database (internal only)
+    - to:
+        - podSelector:
+            matchLabels:
+              app: sonarqube-postgres
+      ports:
+        - port: 5432
+          protocol: TCP
+
+    # Jenkins agent JNLP — if you add build agents later
+    - ports:
+        - port: 50000
+          protocol: TCP
+
+    # Allow traffic within the cluster (to kube-apiserver, other services)
+    - to:
+        - namespaceSelector: {}
