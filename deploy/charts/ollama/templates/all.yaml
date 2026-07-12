@@ -21,9 +21,10 @@ spec:
           args:
             - |
               ollama serve &
+              OLLAMA_PID=$!
               sleep 10
               ollama pull {{ .Values.model }}
-              kill %1
+              kill $OLLAMA_PID 2>/dev/null || true
           volumeMounts:
             - name: models
               mountPath: /root/.ollama
