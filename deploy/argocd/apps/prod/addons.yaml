@@ -51,16 +51,18 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: cluster-issuer
+      - ServerSideApply=true
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/conversion/webhook/clientConfig/caBundle
+        - /metadata/annotations/cert-manager.io~1inject-ca-from-secret
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/wassimchamakh/hr-analytics.git
+    repoURL: https://github.com/wassimchamakh/Gitops-repo.git
     targetRevision: HEAD
     path: deploy/argocd/cluster-addons/cluster-issuer
   destination:
