@@ -8,7 +8,6 @@ resources:
   - jenkins/pvc.yaml
   - jenkins/service.yaml
   - jenkins/deployment.yaml
-  - sonarqube/postgres-secret.yaml
   - sonarqube/pvc.yaml
   - sonarqube/postgres.yaml
   - sonarqube/sonarqube.yaml
