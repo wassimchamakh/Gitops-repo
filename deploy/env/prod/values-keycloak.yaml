@@ -10,6 +10,7 @@ ingress:
 env:
   KC_HTTP_RELATIVE_PATH: /auth
   KC_PROXY_HEADERS: xforwarded
+  KC_DB: dev-file   # persist to the mounted PVC instead of wiping on every restart
   KEYCLOAK_ADMIN_PASSWORD: admin   # temporary — replace with real secret later
 
 healthCheck:
@@ -25,5 +26,5 @@ secretProvider:
 autoscaling:
   enabled: false
 
-# Override full command: kc.sh start-dev (dev mode, no TLS, in-memory DB)
+# Override full command: kc.sh start-dev (dev mode, no TLS, file-backed H2 DB on PVC)
 command: ["/opt/keycloak/bin/kc.sh", "start-dev"]
