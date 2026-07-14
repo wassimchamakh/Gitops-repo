@@ -1,8 +1,7 @@
 # Production values for ML — IMAGE TAG IS UPDATED BY JENKINS CI
 image:
   repository: acrhraprod7e7a9fc9.azurecr.io/ml
-  tag: "b12"
-
+  tag: "b16"
 ingress:
   enabled: true
   host: ""
@@ -13,6 +12,5 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-
 autoscaling:
   enabled: false
