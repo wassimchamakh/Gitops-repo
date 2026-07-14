@@ -1,7 +1,7 @@
 # Production values for ML — IMAGE TAG IS UPDATED BY JENKINS CI
 image:
   repository: acrhraprod7e7a9fc9.azurecr.io/ml
-  tag: "b17"
+  tag: "b19"
 ingress:
   enabled: true
   host: ""
