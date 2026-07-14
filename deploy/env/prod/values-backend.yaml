@@ -2,6 +2,13 @@
 image:
   repository: acrhraprod7e7a9fc9.azurecr.io/backend
   tag: "b16"
+
+# Keycloak reports this as `iss` on issued tokens (browser reaches it via the
+# public ingress over https), which differs from the in-cluster KEYCLOAK_URL
+# used to fetch signing keys.
+env:
+  KEYCLOAK_ISSUER_URL: https://20.94.125.152/auth
+
 ingress:
   host: ""
   tls: false
