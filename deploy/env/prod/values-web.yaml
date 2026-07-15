@@ -1,7 +1,7 @@
 # Production values for web — IMAGE TAG IS UPDATED BY JENKINS CI
 image:
   repository: acrhraprod7e7a9fc9.azurecr.io/web
-  tag: "b21"
+  tag: "b23"
 ingress:
   host: ""
   tls: false
