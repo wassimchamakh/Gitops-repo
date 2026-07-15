@@ -1,7 +1,7 @@
 # Production values for backend — IMAGE TAG IS UPDATED BY JENKINS CI
 image:
   repository: acrhraprod7e7a9fc9.azurecr.io/backend
-  tag: "b20"
+  tag: "b21"
 # Keycloak reports this as `iss` on issued tokens (browser reaches it via the
 # public ingress over https), which differs from the in-cluster KEYCLOAK_URL
 # used to fetch signing keys.
